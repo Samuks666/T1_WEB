@@ -1,13 +1,14 @@
 {
   "name": "t1_web",
   "version": "1.0.0",
-  "description": "",
+  "description": "Trabalho 1 de Programação Web",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node --env-file=.env index.js",
+    "dev": "nodemon --env-file=.env index.js"
   },
   "keywords": [],
-  "type": "module",
   "dependencies": {
     "express": "^5.2.1",
     "express-handlebars": "^9.0.1",
