@@ -6,7 +6,8 @@
 
 Primeiro Configurar o Docker com mongodb
 
-```bash docker run -d \
+```bash
+  docker run -d \
   --name meu-mongodb \
   -p 27017:27017 \
   -v mongodb_data:/data/db \
@@ -14,9 +15,14 @@ Primeiro Configurar o Docker com mongodb
 ```
 
 Segundo instalar dependencias do nodejs
-`npm install`
+
+```bash
+  npm install
+```
 
 ## Arvore de Arquivos
+
+```bash
 
 ├── examples
 │   ├── data_handling.js
@@ -61,5 +67,6 @@ Segundo instalar dependencias do nodejs
 └── main.hbs
 
 14 directories, 28 files
+```
 
 ##
