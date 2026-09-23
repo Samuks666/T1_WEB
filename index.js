@@ -14,5 +14,5 @@ const app = express();
 connectDB();
 
 app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });
