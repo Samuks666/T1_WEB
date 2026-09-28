@@ -1,0 +1,29 @@
+<div class="cartao-padrao">
+    <h2>Agenda de Atendimentos</h2>
+    <table class="tabela-bonita">
+         <!-- o resto da sua tabela continua igual aqui dentro... -->
+        <thead>
+            <tr> 
+                <th>Data</th> 
+                <th>Horário</th>
+                <th>Cliente</th>
+                <th>CPF</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Laço dinâmico para listar os agendamentos -->
+            {{#each agendamentos}}
+            <tr>
+                <td>{{this.data}}</td>
+                <td>{{this.hora}}</td>
+                <td>{{this.nome}}</td>
+                <td>{{this.cpf}}</td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="4">Nenhum agendamento realizado ainda.</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

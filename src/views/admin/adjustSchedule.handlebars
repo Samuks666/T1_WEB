@@ -1,0 +1,36 @@
+<div class="cartao-padrao">
+    <h2>⚙️ Configuração de Vagas por Horário</h2>
+    
+    <form action="/adjustSchedule" method="POST">
+        <table class="tabela-bonita">
+            <thead>
+                <tr>
+                    <th>Horário</th>
+                    <th>Segunda</th>
+                    <th>Terça</th>
+                    <th>Quarta</th>
+                    <th>Quinta</th>
+                    <th>Sexta</th>
+                    <th>Sábado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- O backend vai injetar as linhas aqui automaticamente -->
+                {{#each configuracoes}}
+                <tr>
+                    <td>{{this.horario}}</td>
+                    <td><input type="number" name="capacidade[Segunda][{{this.horario}}]" value="{{this.segunda}}" min="0"></td>
+                    <td><input type="number" name="capacidade[Terca][{{this.horario}}]" value="{{this.terca}}" min="0"></td>
+                    <td><input type="number" name="capacidade[Quarta][{{this.horario}}]" value="{{this.quarta}}" min="0"></td>
+                    <td><input type="number" name="capacidade[Quinta][{{this.horario}}]" value="{{this.quinta}}" min="0"></td>
+                    <td><input type="number" name="capacidade[Sexta][{{this.horario}}]" value="{{this.sexta}}" min="0"></td>
+                    <td><input type="number" name="capacidade[Sabado][{{this.horario}}]" value="{{this.sabado}}" min="0"></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        
+        <!-- Reutilizando o botão azul bonito do cliente -->
+        <button type="submit" class="btn-agendar" style="margin-top: 20px;">Salvar Configurações</button>
+    </form>
+</div>

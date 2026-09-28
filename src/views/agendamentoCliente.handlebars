@@ -1,0 +1,63 @@
+<!-- Container principal que segura o cartão branco no centro da tela -->
+<div class="area-cliente-agendamento">
+    
+    <!-- O cartão branco que vai conter as duas colunas -->
+    <div class="cartao-agendamento">
+
+        <!-- COLUNA DA ESQUERDA: Formulário de Agendamento -->
+        <div class="coluna-formulario">
+            <h2>Agende sua sessão!</h2>
+            
+            <form action="/" method="POST">
+                <!-- Campo de Hora -->
+                <div class="grupo-input">
+                    <label for="hora">Hora:</label>
+                    <input type="time" id="hora" name="hora" required>
+                </div>
+
+                <!-- Campo de Data -->
+                <div class="grupo-input">
+                    <label for="data">Data:</label>
+                    <input type="date" id="data" name="data" required>
+                </div>
+
+                <!-- Campo de Nome -->
+                <div class="grupo-input">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" placeholder="Nome Sobrenome" required>
+                </div>
+
+                <!-- Campo de CPF -->
+                <div class="grupo-input">
+                    <label for="cpf">CPF:</label>
+                    <input type="text" id="cpf" name="cpf" placeholder="123.456.789-01" required>
+                </div>
+
+                <!-- Botão de Agendar -->
+                <button type="submit" class="btn-agendar">Agendar!</button>
+            </form>
+        </div>
+
+        <!-- COLUNA DA DIREITA: Lista de Horários -->
+        <div class="coluna-horarios">
+            <h2>Horários</h2>
+            
+            <!-- Lista de horários disponíveis. 
+                 Futuramente, o seu colega vai usar o comando each aqui para gerar isso com dados do banco -->
+            <ul class="lista-sessoes">
+                <!-- O comando each percorre os dias e vagas gerados pelo backend -->
+                {{#each sessoesDisponiveis}}
+                <li>
+                    <span>{{this.data}}, {{this.hora}} - {{this.vagas}} Sessões</span>
+                    <div class="icone-calendario">📅</div>
+                </li>
+                {{else}}
+                <li>
+                    <span>Não há sessões configuradas no momento.</span>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<!-- Envolvemos a tabela inteira em um formulário. -->
+<!-- O 'action' diz para qual rota do backend os dados vão quando o botão for clicado -->
+<form action="/ajustaPetAgenda" method="POST">
+    
+    <h2>Configuração de Vagas por Horário</h2>
+
+    <!-- A tag <table> cria a estrutura da tabela -->
+    <table class="tabela-configuracao">
+        
+        <!-- <thead> é o cabeçalho da tabela (a primeira linha com os nomes das colunas) -->
+        <thead>
+            <tr> <!-- <tr> significa "Table Row" (Linha da tabela) -->
+                <th>Horário</th> <!-- <th> significa "Table Header" (Célula de cabeçalho) -->
+                <th>Segunda</th>
+                <th>Terça</th>
+                <th>Quarta</th>
+                <th>Quinta</th>
+                <th>Sexta</th>
+                <th>Sábado</th>
+            </tr>
+        </thead>
+
+        <!-- <tbody> é o corpo da tabela, onde ficam os dados -->
+        <tbody>
+            
+            <!-- LINHA 1: Exemplo para as 08:00 -->
+            <tr>
+                <td>08:00</td> <!-- <td> é uma célula normal da tabela -->
+                
+                <!-- Aqui vem o pulo do gato: o atributo 'name'. 
+                     Ao usar 'capacidade[Segunda][08:00]', o HTML vai empacotar 
+                     isso e mandar para o Node.js super organizado para o seu colega ler -->
+                <td><input type="number" name="capacidade[Segunda][08:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Terça][08:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quarta][08:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quinta][08:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sexta][08:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sábado][08:00]" value="2" min="0"></td>
+            </tr>
+
+            <!-- LINHA 2: Exemplo para as 09:00 -->
+            <tr>
+                <td>09:00</td>
+                <td><input type="number" name="capacidade[Segunda][09:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Terça][09:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quarta][09:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quinta][09:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sexta][09:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sábado][09:00]" value="2" min="0"></td>
+            </tr>
+            
+            <tr>
+                <td>10:00</td>
+                <td><input type="number" name="capacidade[Segunda][10:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Terça][10:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quarta][10:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quinta][10:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sexta][10:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sábado][10:00]" value="2" min="0"></td>
+            </tr>
+
+            <tr>
+                <td>11:00</td>
+                <td><input type="number" name="capacidade[Segunda][11:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Terça][11:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quarta][11:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quinta][11:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sexta][11:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sábado][11:00]" value="2" min="0"></td>
+            </tr>
+
+            <tr>
+                <td>14:00</td>
+                <td><input type="number" name="capacidade[Segunda][14:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Terça][14:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quarta][14:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quinta][14:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sexta][14:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sábado][14:00]" value="2" min="0"></td>
+            </tr>
+
+            <tr>
+                <td>15:00</td>
+                <td><input type="number" name="capacidade[Segunda][15:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Terça][15:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quarta][15:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quinta][15:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sexta][15:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sábado][15:00]" value="2" min="0"></td>
+            </tr>
+
+            <tr>
+                <td>16:00</td>
+                <td><input type="number" name="capacidade[Segunda][16:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Terça][16:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quarta][16:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quinta][16:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sexta][16:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sábado][16:00]" value="2" min="0"></td>
+            </tr>
+
+            <tr>
+                <td>17:00</td>
+                <td><input type="number" name="capacidade[Segunda][17:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Terça][17:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quarta][17:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Quinta][17:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sexta][17:00]" value="2" min="0"></td>
+                <td><input type="number" name="capacidade[Sábado][17:00]" value="2" min="0"></td>
+            </tr>
+            <!-- Você (ou o seu colega usando each do Handlebars) repetirá 
+                 essas linhas <tr> para os demais horários do Pet Shop -->
+
+        </tbody>
+    </table>
+
+    <!-- O botão tipo 'submit' é o que dispara o envio do <form> inteiro -->
+    <button type="submit" class="btn-salvar">Salvar Configurações</button>
+
+</form>

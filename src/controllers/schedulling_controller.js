@@ -51,8 +51,7 @@ export const processSchedulling = async (req, res) => {
       return res.status(400).send("Todos os campos são obrigatórios.");
     }
 
-    const vagasRestantes = await calcularVagasDisponiveis(data, horario);
-
+const vagasRestantes = await calculateDisponibility(data, horario);
     if (vagasRestantes <= 0) {
       return res
         .status(400)
@@ -77,4 +76,9 @@ export const processSchedulling = async (req, res) => {
     console.error("[Erro] ao processar agendamento: ", error);
     return res.status(500).send("[Erro] interno no servidor ao agendar.");
   }
+};
+
+export const renderClientPage = async (req, res) => {
+  // Futuramente você fará a busca no banco de dados aqui para enviar ao HTML
+  res.render("calendario");
 };

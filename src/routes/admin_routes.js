@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { isAdmin } from "../middlewares/auth.js"; // Importa a trava de segurança
 import {
   listSchedulling,
   showAdjustSchedule,
@@ -7,10 +8,13 @@ import {
 
 const router = Router();
 
-router.get("/listSchedule", listSchedulling);
+// Rota para VER a lista de agendamentos (Protegida)
+router.get("/listSchedule", isAdmin, listSchedulling);
 
-router.get("/adjustSchedule", showAdjustSchedule);
+// Rota para VER a tela de configurar vagas (Protegida)
+router.get("/adjustSchedule", isAdmin, showAdjustSchedule);
 
-router.post("/adjustSchedule", adjustSchedule);
+// Rota para SALVAR as vagas configuradas (Protegida)
+router.post("/adjustSchedule", isAdmin, adjustSchedule);
 
 export default router;
