@@ -79,6 +79,6 @@ const vagasRestantes = await calculateDisponibility(data, horario);
 };
 
 export const renderClientPage = async (req, res) => {
-  // Futuramente você fará a busca no banco de dados aqui para enviar ao HTML
+  // Fazer busca do banco de dados
   res.render("calendario");
 };

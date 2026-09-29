@@ -1,11 +1,11 @@
 <section class="cabecalho-pagina">
-  <p class="eyebrow">Administração</p>
-  <h1>Configuração da agenda</h1>
-  <p>Defina quantos atendimentos podem ocorrer simultaneamente em cada horário. Use 0 para indisponível.</p>
+  <p class="eyebrow"><i class="fa-solid fa-lock"></i> Administração</p>
+  <h1>Configurar Vagas</h1>
+  <p>Defina quantos pets a equipe consegue atender por horário. (0 = Indisponível)</p>
 </section>
 
 {{#if salvo}}
-  <div class="alerta sucesso">Configuração salva no MongoDB.</div>
+  <div class="alerta sucesso"><i class="fa-solid fa-circle-check"></i> Configurações salvas com sucesso!</div>
 {{/if}}
 
 <form action="/ajustaPetAgenda" method="POST" class="cartao tabela-container">
@@ -13,12 +13,12 @@
     <thead>
       <tr>
         <th>Horário</th>
-        <th>Segunda</th>
-        <th>Terça</th>
-        <th>Quarta</th>
-        <th>Quinta</th>
-        <th>Sexta</th>
-        <th>Sábado</th>
+        <th>Seg</th>
+        <th>Ter</th>
+        <th>Qua</th>
+        <th>Qui</th>
+        <th>Sex</th>
+        <th>Sáb</th>
       </tr>
     </thead>
     <tbody>
@@ -37,6 +37,6 @@
   </table>
 
   <div class="acoes">
-    <button type="submit">Salvar configurações</button>
+    <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Salvar Configurações</button>
   </div>
 </form>

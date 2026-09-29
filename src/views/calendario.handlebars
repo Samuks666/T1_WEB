@@ -1,20 +1,20 @@
 <section class="cabecalho-pagina">
-  <p class="eyebrow">Banho e tosa</p>
-  <h1>Agendamento semanal</h1>
-  <p>Escolha um dos horários disponíveis e informe seu nome e CPF para confirmar.</p>
+  <p class="eyebrow"><i class="fa-solid fa-bath"></i> Banho e tosa</p>
+  <h1>Agendamento da Semana</h1>
+  <p>Escolha um horário para o seu pet! <i class="fa-solid fa-dog"></i></p>
 </section>
 
 {{#if sucesso}}
-  <div class="alerta sucesso">Agendamento realizado com sucesso.</div>
+  <div class="alerta sucesso"><i class="fa-solid fa-circle-check"></i> Agendamento realizado com sucesso.</div>
 {{/if}}
 
 {{#if erro}}
-  <div class="alerta erro">{{erro}}</div>
+  <div class="alerta erro"><i class="fa-solid fa-triangle-exclamation"></i> {{erro}}</div>
 {{/if}}
 
 <form action="/agendar" method="POST" class="grid-agendamento">
   <section class="cartao">
-    <h2>Horários disponíveis</h2>
+    <h2><i class="fa-regular fa-calendar-check"></i> Horários disponíveis</h2>
 
     {{#each dias}}
       <div class="dia">
@@ -37,16 +37,16 @@
         </div>
       </div>
     {{else}}
-      <p class="vazio">Não há horários disponíveis nos próximos sete dias.</p>
+      <p class="vazio"><i class="fa-solid fa-cat"></i> Não há horários disponíveis nos próximos sete dias.</p>
     {{/each}}
   </section>
 
   <section class="cartao dados-cliente">
-    <h2>Dados do cliente</h2>
+    <h2><i class="fa-solid fa-user"></i> Dados do tutor</h2>
 
     <label>
       Nome
-      <input type="text" name="nome" required autocomplete="name">
+      <input type="text" name="nome" required autocomplete="name" placeholder="Como você se chama?">
     </label>
 
     <label>
@@ -54,6 +54,6 @@
       <input type="text" name="cpf" required placeholder="000.000.000-00" inputmode="numeric">
     </label>
 
-    <button type="submit">Confirmar agendamento</button>
+    <button type="submit"><i class="fa-solid fa-paw"></i> Confirmar Agendamento</button>
   </section>
 </form>

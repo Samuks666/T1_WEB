@@ -1,7 +1,7 @@
 <section class="cabecalho-pagina">
-  <p class="eyebrow">Administração</p>
+  <p class="eyebrow"><i class="fa-solid fa-lock"></i> Administração</p>
   <h1>Agenda do Pet Shop</h1>
-  <p>Agendamentos registrados pelos clientes.</p>
+  <p>Controle dos pets que irão tomar banho essa semana.</p>
 </section>
 
 <section class="cartao tabela-container">
@@ -10,7 +10,7 @@
       <tr>
         <th>Data</th>
         <th>Horário</th>
-        <th>Cliente</th>
+        <th>Cliente (Tutor)</th>
         <th>CPF</th>
       </tr>
     </thead>
@@ -18,13 +18,13 @@
       {{#each agendamentos}}
         <tr>
           <td>{{this.data}}</td>
-          <td>{{this.horario}}</td>
+          <td><strong>{{this.horario}}</strong></td>
           <td>{{this.nome}}</td>
           <td>{{this.cpf}}</td>
         </tr>
       {{else}}
         <tr>
-          <td colspan="4" class="vazio">Nenhum agendamento realizado.</td>
+          <td colspan="4" class="vazio"><i class="fa-solid fa-paw"></i> Nenhum pet agendado por enquanto.</td>
         </tr>
       {{/each}}
     </tbody>
