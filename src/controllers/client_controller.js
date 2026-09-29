@@ -4,13 +4,27 @@ import Schedule from "../models/schedule.js";
 
 const DIAS = [
   "Domingo",
-  "Segunda",
-  "Terça",
-  "Quarta",
-  "Quinta",
-  "Sexta",
-  "Sábado",
+"Segunda",
+"Terça",
+"Quarta",
+"Quinta",
+"Sexta",
+"Sábado",
 ];
+
+const DIAS_JANELA = 7;
+
+
+const MENSAGENS_ERRO = {
+  campos: "Preencha nome, CPF e escolha um horário.",
+  cpf: "CPF inválido. Informe os 11 dígitos.",
+  data: "Data ou horário inválido.",
+  passado: "Esse horário já passou.",
+  janela: "Esse horário ainda não está aberto para agendamento.",
+  indisponivel: "Esse horário não está disponível.",
+  duplicado: "Você já possui um agendamento neste horário.",
+  lotado: "Esse horário acabou de ser preenchido. Escolha outro horário.",
+};
 
 const dataKey = (date) => {
   const y = date.getFullYear();
@@ -22,12 +36,12 @@ const dataKey = (date) => {
 const dateFromKey = (key) => new Date(`${key}T12:00:00`);
 
 const formatDate = (date) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
+new Intl.DateTimeFormat("pt-BR", {
+  weekday: "long",
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+}).format(date);
 
 const dateTimeFor = (date, horario) => {
   const [h, m] = horario.split(":").map(Number);
@@ -36,16 +50,40 @@ const dateTimeFor = (date, horario) => {
   return result;
 };
 
+const normalizeCpf = (valor) => {
+  const digitos = String(valor ?? "").replace(/\D/g, "");
+  if (digitos.length !== 11) return null;
+  return digitos.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+};
+
+const redirectErro = (res, codigo) =>
+res.redirect("/?erro=" + encodeURIComponent(codigo));
+
+const findOrCreateClient = async (nome, cpf) => {
+  for (let tentativa = 0; tentativa < 2; tentativa += 1) {
+    try {
+      return await Client.findOneAndUpdate(
+        { cpf },
+        { $set: { nome } },
+        { upsert: true, new: true, setDefaultsOnInsert: true },
+      );
+    } catch (error) {
+      if (error?.code !== 11000) throw error;
+    }
+  }
+  return Client.findOne({ cpf });
+};
+
 export const showCalendar = async (req, res) => {
   try {
     const configs = await Schedule.find({ capacidade: { $gt: 0 } })
-      .sort({ horario: 1 })
-      .lean();
+    .sort({ horario: 1 })
+    .lean();
 
     const hoje = new Date();
     const datas = [];
 
-    for (let offset = 0; offset < 7; offset += 1) {
+    for (let offset = 0; offset < DIAS_JANELA; offset += 1) {
       const date = new Date(hoje);
       date.setHours(12, 0, 0, 0);
       date.setDate(hoje.getDate() + offset);
@@ -76,23 +114,23 @@ export const showCalendar = async (req, res) => {
       const diaSemana = DIAS[date.getDay()];
       const key = dataKey(date);
       const horarios = configs
-        .filter((config) => config.diaSemana === diaSemana)
-        .map((config) => {
-          const usados = ocupacao.get(`${key}|${config.horario}`) || 0;
-          return {
-            horario: config.horario,
-            vagas: Math.max(config.capacidade - usados, 0),
-            data: key,
-            passado: dateTimeFor(date, config.horario) <= hoje,
-          };
-        })
-        .filter((slot) => slot.vagas > 0 && !slot.passado);
+      .filter((config) => config.diaSemana === diaSemana)
+      .map((config) => {
+        const usados = ocupacao.get(`${key}|${config.horario}`) || 0;
+        return {
+          horario: config.horario,
+          vagas: Math.max(config.capacidade - usados, 0),
+           data: key,
+           passado: dateTimeFor(date, config.horario) <= hoje,
+        };
+      })
+      .filter((slot) => slot.vagas > 0 && !slot.passado);
 
       if (horarios.length > 0) {
         dias.push({
           data: key,
           rotulo: formatDate(date),
-          horarios,
+                  horarios,
         });
       }
     }
@@ -100,7 +138,7 @@ export const showCalendar = async (req, res) => {
     res.render("calendario", {
       dias,
       sucesso: req.query.sucesso === "1",
-      erro: req.query.erro || null,
+      erro: MENSAGENS_ERRO[req.query.erro] || null,
     });
   } catch (error) {
     console.error("[cliente] erro ao montar calendário:", error);
@@ -112,43 +150,58 @@ export const createAppointment = async (req, res) => {
   try {
     const { nome, cpf, slot } = req.body;
 
-    if (!nome || !cpf || !slot || !slot.includes("|")) {
-      return res.redirect(
-        "/?erro=" + encodeURIComponent("Preencha nome, CPF e escolha um horário."),
-      );
+    const nomeLimpo = String(nome ?? "").trim();
+    if (!nomeLimpo || !slot || !String(slot).includes("|")) {
+      return redirectErro(res, "campos");
     }
 
-    const [data, horario] = slot.split("|", 2);
+    const cpfFormatado = normalizeCpf(cpf);
+    if (!cpfFormatado) {
+      return redirectErro(res, "cpf");
+    }
+
+    const [data, horario] = String(slot).split("|", 2);
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data) || !/^\d{2}:\d{2}$/.test(horario)) {
+      return redirectErro(res, "data");
+    }
+
     const date = dateFromKey(data);
-    if (Number.isNaN(date.getTime())) {
-      return res.redirect("/?erro=" + encodeURIComponent("Data inválida."));
+
+    if (Number.isNaN(date.getTime()) || dataKey(date) !== data) {
+      return redirectErro(res, "data");
     }
 
     if (dateTimeFor(date, horario) <= new Date()) {
-      return res.redirect(
-        "/?erro=" + encodeURIComponent("Esse horário já passou."),
-      );
+      return redirectErro(res, "passado");
+    }
+
+    const inicioJanela = new Date();
+    inicioJanela.setHours(0, 0, 0, 0);
+    const fimJanela = new Date(inicioJanela);
+    fimJanela.setDate(fimJanela.getDate() + DIAS_JANELA);
+    if (date < inicioJanela || date >= fimJanela) {
+      return redirectErro(res, "janela");
     }
 
     const diaSemana = DIAS[date.getDay()];
     const config = await Schedule.findOne({ diaSemana, horario }).lean();
 
     if (!config || config.capacidade <= 0) {
-      return res.redirect(
-        "/?erro=" + encodeURIComponent("Esse horário não está disponível."),
-      );
+      return redirectErro(res, "indisponivel");
     }
 
-    let cliente = await Client.findOne({ cpf: cpf.trim() });
-    if (!cliente) {
-      cliente = await Client.create({ nome: nome.trim(), cpf: cpf.trim() });
-    } else if (cliente.nome !== nome.trim()) {
-      cliente.nome = nome.trim();
-      await cliente.save();
+    const cliente = await findOrCreateClient(nomeLimpo, cpfFormatado);
+
+    const jaAgendado = await Appointment.exists({
+      data,
+      horario,
+      cliente: cliente._id,
+    });
+    if (jaAgendado) {
+      return redirectErro(res, "duplicado");
     }
 
-    // A confirmação revalida a disponibilidade no banco.
-    // Cada tentativa ocupa uma vaga numerada; o índice único evita overbooking.
     let criado = false;
 
     for (let vaga = 1; vaga <= config.capacidade; vaga += 1) {
@@ -169,12 +222,7 @@ export const createAppointment = async (req, res) => {
     }
 
     if (!criado) {
-      return res.redirect(
-        "/?erro=" +
-          encodeURIComponent(
-            "Esse horário acabou de ser preenchido. Escolha outro horário.",
-          ),
-      );
+      return redirectErro(res, "lotado");
     }
 
     return res.redirect("/?sucesso=1");
