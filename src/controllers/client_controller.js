@@ -4,16 +4,15 @@ import Schedule from "../models/schedule.js";
 
 const DIAS = [
   "Domingo",
-"Segunda",
-"Terça",
-"Quarta",
-"Quinta",
-"Sexta",
-"Sábado",
+  "Segunda",
+  "Terça",
+  "Quarta",
+  "Quinta",
+  "Sexta",
+  "Sábado",
 ];
 
 const DIAS_JANELA = 7;
-
 
 const MENSAGENS_ERRO = {
   campos: "Preencha nome, CPF e escolha um horário.",
@@ -65,7 +64,7 @@ const findOrCreateClient = async (nome, cpf) => {
       return await Client.findOneAndUpdate(
         { cpf },
         { $set: { nome } },
-        { upsert: true, new: true, setDefaultsOnInsert: true },
+        { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
       );
     } catch (error) {
       if (error?.code !== 11000) throw error;
