@@ -1,18 +1,17 @@
 {
-  "name": "t1_web",
+  "name": "petshop-web-t1",
   "version": "1.0.0",
-  "description": "Trabalho 1 de Programação Web",
+  "private": true,
+  "description": "Trabalho 1 de Programação Web - agenda de banho e tosa",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node --env-file=.env index.js",
     "dev": "nodemon --env-file=.env index.js"
   },
-  "keywords": [],
   "dependencies": {
     "express": "^5.2.1",
     "express-handlebars": "^9.0.1",
-    "express-session": "^1.19.0",
     "mongoose": "^9.10.2"
   },
   "devDependencies": {

@@ -1,274 +1,154 @@
-/* =========================================
-   RESET E FONTE GLOBAL
-========================================= */
-* {
-    font-family: 'Segoe UI', 'Roboto', 'Open Sans', sans-serif;
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #f4f7fb;
 }
 
-body {
-    background-color: #222222; /* Fundo escuro */
-    color: #e0e0e0;
-    margin: 0;
-    padding: 20px;
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+.topo {
+  background: #102a43;
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(16, 42, 67, .16);
 }
 
-.titulo-site {
-    text-align: center;
-    color: #64b5f6;
-    margin-bottom: 20px;
+.topo-conteudo {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
 }
 
-/* =========================================
-   CARTÃO E TABELA (ALINHADOS À ESQUERDA)
-========================================= */
-.cartao-padrao {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    max-width: 900px;
-    margin: 0; /* Remove o 'auto' para alinhar à esquerda */
-    color: #333333;
-    border: 1px solid #bbdefb;
+.marca {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.15rem;
 }
 
-.tabela-bonita {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    border-radius: 8px;
-    overflow: hidden; /* Garante que as bordas arredondadas funcionem na tabela */
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+nav { display: flex; gap: 10px; flex-wrap: wrap; }
+nav a {
+  color: #dce8f3;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+nav a:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+.pagina {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 38px 24px 60px;
 }
 
-.tabela-bonita th, .tabela-bonita td {
-    border: 1px solid #e0e0e0;
-    padding: 12px;
-    text-align: left; /* Alinha o texto da tabela à esquerda */
+.cabecalho-pagina { margin-bottom: 24px; }
+.cabecalho-pagina h1 { margin: 4px 0 8px; font-size: 2rem; }
+.cabecalho-pagina p { margin: 0; color: #62748a; }
+.eyebrow {
+  color: #2f6fad !important;
+  text-transform: uppercase;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .08em;
 }
 
-.tabela-bonita th {
-    background-color: #1565c0;
-    color: white;
+.cartao {
+  background: #fff;
+  border: 1px solid #dce5ef;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 7px 24px rgba(16, 42, 67, .06);
+}
+.cartao h2 { margin-top: 0; }
+
+.grid-agendamento {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, .8fr);
+  gap: 22px;
+  align-items: start;
 }
 
-.tabela-bonita tbody tr:nth-child(even) {
-    background-color: #f5faff; /* Azul bem clarinho para o efeito zebra */
+.dia + .dia { margin-top: 22px; }
+.dia h3 { margin: 0 0 10px; text-transform: capitalize; font-size: 1rem; }
+.slots { display: flex; flex-wrap: wrap; gap: 9px; }
+.slot input { position: absolute; opacity: 0; pointer-events: none; }
+.slot span {
+  display: flex;
+  flex-direction: column;
+  min-width: 105px;
+  padding: 10px 12px;
+  border: 1px solid #ccd9e6;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #f8fbfe;
+}
+.slot small { color: #64788e; margin-top: 2px; }
+.slot input:checked + span {
+  border-color: #2878c7;
+  background: #e9f4ff;
+  box-shadow: 0 0 0 2px rgba(40,120,199,.12);
 }
 
-/* =========================================
-   TELA DE AGENDAMENTO DO CLIENTE
-========================================= */
-
-/* Nova fonte para esta seção, mais moderna e limpa */
-.area-cliente-agendamento {
-    font-family: 'Segoe UI', 'Roboto', 'Open Sans', sans-serif;
-    display: flex;
-    justify-content: center; /* Centraliza o cartão na tela */
-    padding: 40px 20px;
+.dados-cliente label {
+  display: block;
+  font-weight: 700;
+  margin-top: 16px;
 }
 
-/* O cartão branco principal que segura tudo */
-.cartao-agendamento {
-    background-color: #ffffff; /* Fundo branco do cartão */
-    display: flex; /* Coloca os filhos (as duas colunas) lado a lado */
-    flex-wrap: wrap; /* Se a tela for pequena (celular), joga a coluna da direita para baixo */
-    gap: 40px; /* Espaço entre a coluna da esquerda e da direita */
-    padding: 30px;
-    border-radius: 12px; /* Bordas arredondadas */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave para destacar do fundo cinza/escuro */
-    max-width: 900px;
-    width: 100%;
-    border: 1px solid #bbdefb; /* Bordinha azul bem clara ao redor do cartão */
+input[type="text"], input[type="number"] {
+  width: 100%;
+  border: 1px solid #c9d5e2;
+  border-radius: 9px;
+  padding: 10px 11px;
+  font: inherit;
+  background: #fff;
+  color: #172033;
 }
 
-/* Títulos das colunas (Azul escuro) */
-.cartao-agendamento h2 {
-    color: #0d47a1; /* Azul escuro/marinho */
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 24px;
-    border-bottom: 2px solid #e3f2fd; /* Linha decorativa abaixo do título */
-    padding-bottom: 10px;
+.dados-cliente input { margin-top: 6px; }
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 16px;
+  background: #1769aa;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
 }
+button:hover { background: #125789; }
+.dados-cliente button { width: 100%; margin-top: 22px; }
 
-/* ================== COLUNA ESQUERDA (FORMULÁRIO) ================== */
-.coluna-formulario {
-    flex: 1; /* Faz a coluna crescer e ocupar metade do espaço */
-    min-width: 300px; /* Impede que fique espremida em telas menores */
+.alerta {
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border: 1px solid;
 }
+.alerta.sucesso { background: #edf9f1; color: #1f6d3f; border-color: #bfe4cd; }
+.alerta.erro { background: #fff1f1; color: #9d3030; border-color: #efc6c6; }
 
-.grupo-input {
-    margin-bottom: 15px; /* Espaço entre um campo e outro */
+.tabela-container { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  border-bottom: 1px solid #e3e9f0;
+  padding: 12px 10px;
+  text-align: left;
+  white-space: nowrap;
 }
+thead th { background: #edf4fa; color: #294861; }
+tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+.tabela-configuracao td, .tabela-configuracao th { text-align: center; }
+.tabela-configuracao input { width: 68px; text-align: center; }
+.acoes { display: flex; justify-content: flex-end; margin-top: 20px; }
+.vazio { color: #708297; text-align: center; }
 
-.grupo-input label {
-    display: block; /* Coloca o texto em cima da caixinha */
-    margin-bottom: 5px;
-    color: #1565c0; /* Azul médio para o texto das labels */
-    font-weight: 600;
-}
-
-.grupo-input input {
-    width: 100%; /* Caixinha ocupa a largura toda da coluna */
-    padding: 10px;
-    border: 1px solid #90caf9; /* Borda azul clara */
-    border-radius: 6px;
-    box-sizing: border-box; /* Garante que o padding não quebre o tamanho */
-    font-size: 14px;
-}
-
-.grupo-input input:focus {
-    outline: none;
-    border-color: #1e88e5; /* Borda fica azul mais forte ao clicar para digitar */
-}
-
-/* O botão de Agendar (Azul vibrante) */
-.btn-agendar {
-    width: 100%;
-    padding: 12px;
-    background-color: #1976d2; /* Azul principal */
-    color: #ffffff; /* Texto branco */
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s; /* Efeito suave ao passar o mouse */
-}
-
-.btn-agendar:hover {
-    background-color: #1565c0; /* Azul um pouco mais escuro no hover */
-}
-
-/* ================== COLUNA DIREITA (HORÁRIOS) ================== */
-.coluna-horarios {
-    flex: 1; /* Faz a coluna crescer e ocupar a outra metade do espaço */
-    min-width: 300px;
-}
-
-.lista-sessoes {
-    list-style: none; /* Tira as bolinhas padrão de lista do HTML */
-    padding: 0;
-    margin: 0;
-}
-
-/* Cada linha de horário */
-.lista-sessoes li {
-    background-color: #e3f2fd; /* Fundo azul bem clarinho */
-    color: #0d47a1; /* Texto azul escuro */
-    margin-bottom: 10px;
-    padding: 12px 15px;
-    border-radius: 6px;
-    display: flex; /* Para alinhar o texto na esquerda e o ícone na direita */
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 500;
-}
-
-/* Efeito de cores alternadas para imitar a imagem (uma linha clarinha, outra branca) */
-.lista-sessoes li:nth-child(even) {
-    background-color: #f5f5f5; /* Um cinza/branco alternado */
-    color: #333;
-}
-
-/* O "botãozinho" do calendário na direita de cada horário */
-.icone-calendario {
-    background-color: #64b5f6; /* Azul médio */
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.lista-sessoes li:nth-child(even) .icone-calendario {
-    background-color: #b0bec5; /* Muda a cor do ícone nas linhas alternadas */
-}
-
-/* =========================================
-   ESTILOS DO MENU DE NAVEGAÇÃO (CORRIGIDO)
-========================================= */
-.menu-principal {
-    display: flex;
-    justify-content: center; /* Centraliza os botões no meio da tela */
-    gap: 15px; /* Espaço entre eles */
-    margin-bottom: 30px;
-    padding: 20px 0;
-}
-
-.menu-principal a {
-    background-color: #1976d2; /* Botão azul vibrante */
-    color: #ffffff; /* Texto branco */
-    text-decoration: none; /* Sem sublinhado */
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-family: 'Segoe UI', 'Roboto', sans-serif;
-    transition: background-color 0.3s;
-}
-
-.menu-principal a:hover {
-    background-color: #1565c0; /* Azul mais escuro ao passar o mouse */
-}
-
-/* =========================================
-   CARTÃO PADRÃO PARA O ADMIN (IGUAL AO CLIENTE)
-========================================= */
-.cartao-padrao {
-    background-color: #ffffff; /* Fundo branco do cartão */
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    max-width: 900px;
-    margin: 0 auto; /* Centraliza o cartão na tela */
-    font-family: 'Segoe UI', 'Roboto', sans-serif;
-    color: #333333;
-    border: 1px solid #bbdefb; /* Bordinha azul clara igual a do cliente */
-}
-
-.cartao-padrao h2 {
-    color: #0d47a1;
-    border-bottom: 2px solid #e3f2fd;
-    padding-bottom: 10px;
-    margin-top: 0;
-}
-
-/* =========================================
-   TABELA BONITA (ESTILO AZUL E BRANCO)
-========================================= */
-.tabela-bonita {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.tabela-bonita th, .tabela-bonita td {
-    border: 1px solid #e0e0e0;
-    padding: 12px;
-    text-align: center;
-}
-
-.tabela-bonita th {
-    background-color: #1565c0; /* Cabeçalho azul */
-    color: white;
-}
-
-/* Linhas alternadas cinza clarinho */
-.tabela-bonita tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.tabela-bonita input[type="number"] {
-    width: 50px;
-    padding: 8px;
-    border: 1px solid #90caf9;
-    border-radius: 6px;
-    text-align: center;
-    background-color: #ffffff; /* Fundo branco na caixinha de digitar */
-    color: #333333; /* Letra escura */
-}
-
-.tabela-bonita input[type="number"]:focus {
-    outline: none;
-    border-color: #1e88e5;
+@media (max-width: 780px) {
+  .topo-conteudo { align-items: flex-start; flex-direction: column; }
+  .grid-agendamento { grid-template-columns: 1fr; }
+  .pagina { padding: 28px 16px 50px; }
 }

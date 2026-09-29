@@ -1,36 +1,42 @@
-<div class="cartao-padrao">
-    <h2>⚙️ Configuração de Vagas por Horário</h2>
-    
-    <form action="/adjustSchedule" method="POST">
-        <table class="tabela-bonita">
-            <thead>
-                <tr>
-                    <th>Horário</th>
-                    <th>Segunda</th>
-                    <th>Terça</th>
-                    <th>Quarta</th>
-                    <th>Quinta</th>
-                    <th>Sexta</th>
-                    <th>Sábado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- O backend vai injetar as linhas aqui automaticamente -->
-                {{#each configuracoes}}
-                <tr>
-                    <td>{{this.horario}}</td>
-                    <td><input type="number" name="capacidade[Segunda][{{this.horario}}]" value="{{this.segunda}}" min="0"></td>
-                    <td><input type="number" name="capacidade[Terca][{{this.horario}}]" value="{{this.terca}}" min="0"></td>
-                    <td><input type="number" name="capacidade[Quarta][{{this.horario}}]" value="{{this.quarta}}" min="0"></td>
-                    <td><input type="number" name="capacidade[Quinta][{{this.horario}}]" value="{{this.quinta}}" min="0"></td>
-                    <td><input type="number" name="capacidade[Sexta][{{this.horario}}]" value="{{this.sexta}}" min="0"></td>
-                    <td><input type="number" name="capacidade[Sabado][{{this.horario}}]" value="{{this.sabado}}" min="0"></td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-        
-        <!-- Reutilizando o botão azul bonito do cliente -->
-        <button type="submit" class="btn-agendar" style="margin-top: 20px;">Salvar Configurações</button>
-    </form>
-</div>
+<section class="cabecalho-pagina">
+  <p class="eyebrow">Administração</p>
+  <h1>Configuração da agenda</h1>
+  <p>Defina quantos atendimentos podem ocorrer simultaneamente em cada horário. Use 0 para indisponível.</p>
+</section>
+
+{{#if salvo}}
+  <div class="alerta sucesso">Configuração salva no MongoDB.</div>
+{{/if}}
+
+<form action="/ajustaPetAgenda" method="POST" class="cartao tabela-container">
+  <table class="tabela-configuracao">
+    <thead>
+      <tr>
+        <th>Horário</th>
+        <th>Segunda</th>
+        <th>Terça</th>
+        <th>Quarta</th>
+        <th>Quinta</th>
+        <th>Sexta</th>
+        <th>Sábado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each linhas}}
+        <tr>
+          <th>{{this.horario}}</th>
+          <td><input type="number" min="0" name="capacidade[Segunda][{{this.horario}}]" value="{{this.segunda}}"></td>
+          <td><input type="number" min="0" name="capacidade[Terça][{{this.horario}}]" value="{{this.terca}}"></td>
+          <td><input type="number" min="0" name="capacidade[Quarta][{{this.horario}}]" value="{{this.quarta}}"></td>
+          <td><input type="number" min="0" name="capacidade[Quinta][{{this.horario}}]" value="{{this.quinta}}"></td>
+          <td><input type="number" min="0" name="capacidade[Sexta][{{this.horario}}]" value="{{this.sexta}}"></td>
+          <td><input type="number" min="0" name="capacidade[Sábado][{{this.horario}}]" value="{{this.sabado}}"></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div class="acoes">
+    <button type="submit">Salvar configurações</button>
+  </div>
+</form>

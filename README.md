@@ -1,120 +1,83 @@
-# Trabalho 1 - Programação Web
+# Trabalho 1 — Programação Web
 
-Sistema de agendamento e gerenciamento desenvolvido como requisito para a disciplina de Programação Web. A aplicação adota a arquitetura MVC (Model-View-Controller) e utiliza renderização no lado do servidor com a engine Handlebars.
+Aplicação Web para agendamento de serviços de banho e tosa de um Pet Shop, conforme o enunciado da disciplina.
 
----
+## Tecnologias obrigatórias utilizadas
 
-## Tecnologias Utilizadas
+- Node.js
+- Express
+- MongoDB com Mongoose
+- Handlebars
+- JavaScript
+- HTML
+- CSS
 
-- **Ambiente de Execução:** Node.js
-- **Framework Web:** Express
-- **Template Engine:** Handlebars (.hbs)
-- **Banco de Dados:** MongoDB (via Mongoose)
-- **Infraestrutura:** Docker
+A comunicação dos formulários com o servidor usa submissão HTML (`<form>`), opção permitida pelo enunciado.
 
----
+## Funcionalidades
 
-## Pré-requisitos
+### Cliente — `/`
 
-Para executar este projeto localmente, é necessário ter as seguintes ferramentas instaladas:
+- mostra os horários disponíveis dos próximos 7 dias;
+- não mostra horários com capacidade 0;
+- não mostra horários que já passaram;
+- não mostra horários que já atingiram a capacidade;
+- permite agendar informando nome e CPF;
+- revalida a disponibilidade no momento da confirmação;
+- impede overbooking com índice único por vaga no MongoDB.
 
-- [Node.js](https://nodejs.org/) (versão 18 ou superior)
-- [Docker](https://www.docker.com/)
-- _Opcional:_ MongoDB Compass e Postman (para testes de rotas e banco de dados)
+### Agenda do Pet Shop — `/listaPetAgenda`
 
----
+Exibe:
 
-## Instalação e Configuração
+- data do atendimento;
+- horário;
+- nome do cliente;
+- CPF.
 
-**1. Configurar o banco de dados (Docker)**
+### Configuração da agenda — `/ajustaPetAgenda`
 
-Inicie um contêiner do MongoDB executando o comando abaixo. Isso criará um volume local para persistência dos dados.
+Permite definir a capacidade simultânea de cada dia e horário. As configurações são armazenadas no MongoDB.
 
-```bash
-docker run -d \
-  --name meu-mongodb \
-  -p 27017:27017 \
-  -v mongodb_data:/data/db \
-  mongo:latest
-```
+## Banco de dados
 
-**2. Instalar as dependências do projeto**
+O projeto utiliza três coleções principais:
 
-Na raiz do projeto, instale as dependências listadas no `package.json`:
+- `clients`: clientes identificados por nome e CPF;
+- `schedules`: configuração semanal de dia, horário e capacidade;
+- `appointments`: agendamentos, vinculados ao cliente e a uma vaga do horário.
+
+## Como executar
+
+1. Instale as dependências:
 
 ```bash
 npm install
 ```
 
-**3. Instalar ferramentas auxiliares de desenvolvimento (Opcional - Arch Linux e Derivados)**
-
-Para facilitar o debugging durante o desenvolvimento, você pode instalar o MongoDB Compass e o Postman:
+2. Copie o arquivo de exemplo de ambiente:
 
 ```bash
-paru -S mongodb-compass-bin postman-bin
-# ou
-yay -S mongodb-compass-bin postman-bin
+cp .env.example .env
 ```
 
----
+3. Ajuste, se necessário, a URI do MongoDB no `.env`:
 
-## Execução
+```env
+PORT=3000
+MONGODB_URI=mongodb://127.0.0.1:27017/petshop_web
+```
 
-Após garantir que o contêiner do MongoDB está rodando e as dependências foram instaladas, inicie a aplicação:
+4. Inicie o MongoDB e execute:
 
 ```bash
 npm start
 ```
 
-Acesse a aplicação através do navegador no endereço padrão (geralmente `http://localhost:3000`, caso não tenha sido alterado nas configurações do servidor).
-
----
-
-## Estrutura de Arquivos
-
-Abaixo encontra-se a arquitetura de diretórios e arquivos principais do projeto:
+5. Acesse:
 
 ```text
-.
-├── examples
-│   ├── data_handling.js
-│   ├── express.js
-│   ├── handlebars.js
-│   ├── http_server.js
-│   ├── index.hbs
-│   ├── main.hbs
-│   ├── middlewares.js
-│   ├── moongose.js
-│   └── rest_api.js
-├── src
-│   ├── config
-│   │   └── db.js
-│   ├── controllers
-│   │   ├── admin_controller.js
-│   │   └── schedulling_controller.js
-│   ├── models
-│   │   ├── client.js
-│   │   ├── schedule.js
-│   │   └── schedulling.js
-│   ├── public
-│   │   ├── css
-│   │   │   └── style.css
-│   │   └── js
-│   │       └── client.js
-│   ├── routes
-│   │   ├── admin_routes.js
-│   │   └── client_routes.js
-│   └── views
-│       ├── admin
-│       │   ├── listSchedule.hbs
-│       │   └── updateSchedule.hbs
-│       ├── client
-│       │   └── schedule.hbs
-│       └── layouts
-│           └── main.hbs
-├── index.js
-├── LICENSE
-├── package.json
-├── package-lock.json
-└── README.md
+http://localhost:3000
 ```
+
+Antes de testar o agendamento, configure as capacidades em `/ajustaPetAgenda`.

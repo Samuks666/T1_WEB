@@ -1,52 +1,89 @@
-import Schedulling from "../models/schedulling.js";
+import Appointment from "../models/appointment.js";
 import Schedule from "../models/schedule.js";
 
-export const listSchedulling = async (req, res) => {
-    try {
-        // SOLUÇÃO: Criamos a variável 'agendamentos' antes de usá-la.
-        // Temporariamente, colocamos dados falsos para você testar o visual da sua tabela.
-        const agendamentos = [
-            { data: "2026-10-15", hora: "08:00", nome: "Grégori Oliveira", cpf: "123.456.789-00" }
-        ];
+const DIAS = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+const HORARIOS = ["08:00", "09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"];
 
-        /* Aviso para o seu colega de backend:
-           Futuramente, apague a lista acima e busque do banco de dados usando o Mongoose, ex:
-           const agendamentos = await Agendamento.find().lean();
-        */
-
-        // Agora a variável existe e a tela vai abrir normalmente
-        res.render("admin/listSchedule", { agendamentos });
-        
-    } catch (error) {
-        console.error("[Erro] ao listar agendamentos: ", error);
-        res.status(500).send("Erro no servidor");
-    }
+const formatDate = (key) => {
+  const [y, m, d] = key.split("-");
+  return `${d}/${m}/${y}`;
 };
 
-export const showAdjustSchedule = async (req, res) => {
+export const listPetAgenda = async (_req, res) => {
   try {
-    const config = await Schedule.find().lean();
+    const docs = await Appointment.find()
+      .populate("cliente")
+      .sort({ data: 1, horario: 1, vaga: 1 })
+      .lean();
 
-    res.render("admin/adjustSchedule", { config });
+    const agendamentos = docs.map((item) => ({
+      data: formatDate(item.data),
+      horario: item.horario,
+      nome: item.cliente?.nome || "Cliente não encontrado",
+      cpf: item.cliente?.cpf || "-",
+    }));
+
+    res.render("admin/listSchedule", { agendamentos });
   } catch (error) {
-    console.error("[Erro] ao carregar página de ajuste: ", error);
-    res.status(500).send("[Erro] no servidor");
+    console.error("[admin] erro ao listar agenda:", error);
+    res.status(500).send("Erro ao consultar a agenda do Pet Shop.");
   }
 };
 
-export const adjustSchedule = async (req, res) => {
+export const showAdjustPetAgenda = async (req, res) => {
   try {
-    const { diaSemana, horario, capacidade } = req.body;
-
-    await Schedule.findOneAndUpdate(
-      { diaSemana, horario },
-      { capacidade: Number(capacidade) },
-      { upsert: true, new: true },
+    const docs = await Schedule.find().lean();
+    const mapa = new Map(
+      docs.map((item) => [
+        `${item.diaSemana}|${item.horario}`,
+        item.capacidade,
+      ]),
     );
 
-    res.redirect("/adjustSchedule");
+    const linhas = HORARIOS.map((horario) => ({
+      horario,
+      segunda: mapa.get(`Segunda|${horario}`) ?? 0,
+      terca: mapa.get(`Terça|${horario}`) ?? 0,
+      quarta: mapa.get(`Quarta|${horario}`) ?? 0,
+      quinta: mapa.get(`Quinta|${horario}`) ?? 0,
+      sexta: mapa.get(`Sexta|${horario}`) ?? 0,
+      sabado: mapa.get(`Sábado|${horario}`) ?? 0,
+    }));
+
+    res.render("admin/adjustSchedule", {
+      linhas,
+      salvo: req.query.salvo === "1",
+    });
   } catch (error) {
-    console.error("[Erro] ao fazer ajuste: ", error);
-    res.status(500).send("[Erro] no servidor");
+    console.error("[admin] erro ao carregar configuração:", error);
+    res.status(500).send("Erro ao carregar a configuração da agenda.");
+  }
+};
+
+export const adjustPetAgenda = async (req, res) => {
+  try {
+    const capacidades = req.body.capacidade || {};
+    const operacoes = [];
+
+    for (const dia of DIAS) {
+      for (const horario of HORARIOS) {
+        const valor = Number(capacidades?.[dia]?.[horario] ?? 0);
+        const capacidade = Number.isFinite(valor) && valor >= 0 ? Math.floor(valor) : 0;
+
+        operacoes.push({
+          updateOne: {
+            filter: { diaSemana: dia, horario },
+            update: { $set: { capacidade } },
+            upsert: true,
+          },
+        });
+      }
+    }
+
+    await Schedule.bulkWrite(operacoes);
+    res.redirect("/ajustaPetAgenda?salvo=1");
+  } catch (error) {
+    console.error("[admin] erro ao salvar configuração:", error);
+    res.status(500).send("Erro ao salvar a configuração da agenda.");
   }
 };

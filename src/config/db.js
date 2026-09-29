@@ -5,17 +5,9 @@ export const connectDB = async () => {
   const uri = process.env.MONGODB_URI;
 
   if (!uri) {
-    console.error(
-      "[banco de dados]: MONGODB_URI não foi definida no arquivo .env",
-    );
-    process.exit(1);
+    throw new Error("MONGODB_URI não definida no arquivo .env");
   }
 
-  try {
-    await mongoose.connect(uri);
-    console.log("[banco de dados]: Conectado com sucesso");
-  } catch (err) {
-    console.error(`[banco de dados]: Falha ao conectar: ${err.message}`);
-    process.exit(1);
-  }
+  await mongoose.connect(uri);
+  console.log("[banco] MongoDB conectado");
 };
