@@ -19,7 +19,6 @@ const appointmentSchema = new mongoose.Schema(
 );
 
 // Cada vaga de um mesmo dia/horário só pode ser ocupada uma vez.
-// Isso impede overbooking mesmo se duas confirmações chegarem quase juntas.
 appointmentSchema.index(
   { data: 1, horario: 1, vaga: 1 },
   { unique: true },

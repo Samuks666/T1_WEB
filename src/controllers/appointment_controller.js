@@ -1,5 +1,5 @@
 import Schedule from "../models/schedule.js";
-import Schedulling from "../models/schedulling.js";
+import Appointment from "../models/appointment.js";
 import Client from "../models/client.js";
 
 export const calculateDisponibility = async (dataConsulta, horario) => {
@@ -33,7 +33,7 @@ export const calculateDisponibility = async (dataConsulta, horario) => {
     return 0;
   }
 
-  const agendamentosRealizados = await Schedulling.countDocuments({
+  const agendamentosRealizados = await Appointment.countDocuments({
     data: dataConsulta,
     horario: horario,
   });
@@ -51,13 +51,13 @@ export const processSchedulling = async (req, res) => {
       return res.status(400).send("Todos os campos são obrigatórios.");
     }
 
-const vagasRestantes = await calculateDisponibility(data, horario);
+    const vagasRestantes = await calculateDisponibility(data, horario);
     if (vagasRestantes <= 0) {
       return res
-        .status(400)
-        .send(
-          "Desculpe, este horário acabou de ser preenchido ou não possui vagas.",
-        );
+      .status(400)
+      .send(
+        "Desculpe, este horário acabou de ser preenchido ou não possui vagas.",
+      );
     }
 
     let cliente = await Client.findOne({ cpf });
@@ -65,11 +65,57 @@ const vagasRestantes = await calculateDisponibility(data, horario);
       cliente = await Client.create({ nome, cpf });
     }
 
-    await Schedulling.create({
+    const jaAgendado = await Appointment.exists({
       data,
       horario,
       cliente: cliente._id,
     });
+    if (jaAgendado) {
+      return res
+      .status(409)
+      .send("Você já possui um agendamento neste horário.");
+    }
+
+    const ocupadasAtuais = await Appointment.countDocuments({ data, horario });
+    const capacidade = vagasRestantes + ocupadasAtuais;
+
+    const MAX_TENTATIVAS = 3;
+    let agendamento = null;
+
+    for (let i = 0; i < MAX_TENTATIVAS && !agendamento; i++) {
+      const ocupadas = new Set(
+        await Appointment.distinct("vaga", { data, horario }),
+      );
+
+      let vagaLivre = null;
+      for (let v = 1; v <= capacidade; v++) {
+        if (!ocupadas.has(v)) {
+          vagaLivre = v;
+          break;
+        }
+      }
+
+      if (vagaLivre === null) break;
+
+      try {
+        agendamento = await Appointment.create({
+          data,
+          horario,
+          cliente: cliente._id,
+          vaga: vagaLivre,
+        });
+      } catch (error) {
+        if (error.code !== 11000) throw error;
+      }
+    }
+
+    if (!agendamento) {
+      return res
+      .status(400)
+      .send(
+        "Desculpe, este horário acabou de ser preenchido ou não possui vagas.",
+      );
+    }
 
     return res.send("Agendamento realizado com sucesso!");
   } catch (error) {
@@ -79,6 +125,5 @@ const vagasRestantes = await calculateDisponibility(data, horario);
 };
 
 export const renderClientPage = async (req, res) => {
-  // Fazer busca do banco de dados
   res.render("calendario");
 };
