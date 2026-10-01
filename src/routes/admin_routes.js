@@ -7,7 +7,6 @@ import {
 
 const router = Router();
 
-// Nomes exigidos pelo enunciado.
 router.get("/listaPetAgenda", listPetAgenda);
 router.get("/ajustaPetAgenda", showAdjustPetAgenda);
 router.post("/ajustaPetAgenda", adjustPetAgenda);
